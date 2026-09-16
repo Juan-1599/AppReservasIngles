@@ -1,35 +1,40 @@
 import React, {useState} from "react";
 import {View, Text, TextInput, FlatList, ScrollView, StyleSheet} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+
+
 import { Ionicons } from "@expo/vector-icons";
+
+import useResponsive from "../hooks/useResponsive";
 import Card from "../components/Card";
 import NivelFiltro from "../components/NivelFiltro";
 import {spacing, colors, typography, radius} from "../theme";
 import {CLASES, NIVELES} from "../data/clases";
 
 export default function ClasesScreen ({navigation}) {
+    const insets = useSafeAreaInsets();
     //const { columnas, paddingHorizontal } = useResponsive();
     const [nivel, setNivel] = useState('Todos');
     const [busqueda, setBusqueda] = useState('');
 
     return (
-        <View>
-            <View>
-                <Text>Aplicación de clases de inglés</Text>
-                <View>
+        <View Style={[style.pantalla, {paddingTop: insets.top + spacing.md}]}>
+            <View style={{paddingHorizontal}}>
+                <Text style={typography.titulo}>Aplicación de clases de inglés</Text>
+                <View style={style.buscador}>
                     <Ionicons name="search" size={18}/>
                     <TextInput
                         placeholder="Buscar por nivel o profesor"
-                        value={nivel}
-                        onChangeText={setNivel}
+                        value={busqueda}
+                        onChangeText={setBusqueda}
                         autoCorrect={false}
                         autoComplete={false}
                     />
 
-                    {busqueda.length > 0 && (
+                    {busqueda.length > 0 &&(
                         <Ionicons
                             name="close-circle"
-                            size= {18}
+                            size={18}
                             onPress={()=> setBusqueda('')}
                         />
                     )}

@@ -18,8 +18,11 @@ export const spacing = {
 };
 
 export const typography = {
-    titulo: {fontSize: 28, fontWeight: '800', color: colors.texto},
-    subtitulo: {fontSize: 18, fontWeight: '600', color: colors.texto}
+    titulo: {fontSize: 20, fontWeight: '800', color: colors.texto},
+    subtitulo: {fontSize: 18, fontWeight: '600', color: colors.texto},
+    cuerpo: {fontSize: 15, fontWeight: '600', color: colors.texto},
+    secundario: {fontSize: 13, color: colors.textoSuave},
+    etiqueta: {fontSize: 12, fontWeight: '600'}
 };
 
 export const radius = {
