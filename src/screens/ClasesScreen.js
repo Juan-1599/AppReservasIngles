@@ -14,11 +14,12 @@ import {CLASES, NIVELES} from "../data/clases";
 export default function ClasesScreen ({navigation}) {
     const insets = useSafeAreaInsets();
     //const { columnas, paddingHorizontal } = useResponsive();
+    const { paddingHorizontal } = useResponsive();
     const [nivel, setNivel] = useState('Todos');
     const [busqueda, setBusqueda] = useState('');
 
     return (
-        <View Style={[style.pantalla, {paddingTop: insets.top + spacing.md}]}>
+        <View style={[style.pantalla, {paddingTop: insets.top + spacing.md}]}>
             <View style={{paddingHorizontal}}>
                 <Text style={typography.titulo}>Aplicación de clases de inglés</Text>
                 <View style={style.buscador}>
