@@ -1,6 +1,7 @@
-import React, {useState} from "react";
-import {View, Text, TextInput, FlatList, ScrollView, StyleSheet} from "react-native";
+import React, {useState, useMemo} from "react";
+import {View, Text, TextInput, FlatList, ScrollView, StyleSheet, FlatList} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import EstadoVacio from "../components/EstadoVacio";
 
 
 import { Ionicons } from "@expo/vector-icons";
@@ -13,14 +14,24 @@ import {CLASES, NIVELES} from "../data/clases";
 
 export default function ClasesScreen ({navigation}) {
     const insets = useSafeAreaInsets();
-    //const { columnas, paddingHorizontal } = useResponsive();
-    const { paddingHorizontal } = useResponsive();
+    const { columnas, paddingHorizontal } = useResponsive();
+
     const [nivel, setNivel] = useState('Todos');
     const [busqueda, setBusqueda] = useState('');
 
+    const resultados = useMemo(()=>{
+        const textoBusqueda = busqueda.trim().toLowerCase();
+        return CLASES.filter((clase)=>{
+            const coincideNivel = nivel === 'Todos' || clase.nivel === nivel;
+            const coincideTextoBusqueda = textoBusqueda === '' ||
+            clase.titulo.toLowerCase().includes(textoBusqueda)
+            clase.profesor.nombre.toLowerCase().includes(textoBusqueda)
+            return coincideNivel && coincideTextoBusqueda
+        })
+    },[nivel, busqueda]);
+
     return (
         <View style={[style.pantalla, {paddingTop: insets.top + spacing.md}]}>
-            <View style={{paddingHorizontal}}>
                 <Text style={typography.titulo}>Aplicación de clases de inglés</Text>
                 <View style={style.buscador}>
                     <Ionicons name="search" size={18}/>
@@ -31,7 +42,6 @@ export default function ClasesScreen ({navigation}) {
                         autoCorrect={false}
                         autoComplete={false}
                     />
-
                     {busqueda.length > 0 &&(
                         <Ionicons
                             name="close-circle"
@@ -53,13 +63,40 @@ export default function ClasesScreen ({navigation}) {
                         />
                     ))
                 }
-                        
                 </ScrollView>
-            </View>
+                <FlatList
+                    data={CLASES}
+                    renderItem={({item})=>{
+                        <Card
+                            clase ={item}
+                            onPress={()=> navigation.navigate('DetalleClase', {clase: item})}
+                        />
+
+                    }}
+                    numColumns={columnas}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle = {{paddingHorizontal,
+                        flexGrow: 1,
+                        paddingBottom: spacing.xl
+                    }}
+                    ListEmptyComponent={
+                    <EstadoVacio
+                        icono="search-outline"
+                        titulo="No encontramos valores de búsqueda"
+                        mensaje="Prueba con otro valor de busqueda o cambia las palabras"
+                        textoAccion="Quitar filtros
+                        onAction={() => {
+                            setNivel('Todos');
+                            setBusqueda('');
+                        }}
+                        "
+                    />
+                }
+            />
         </View>
+
     )
 }
-
 const style = StyleSheet.create({
 pantalla: { flex: 1, backgroundColor: colors.fondo },
 buscador: {
