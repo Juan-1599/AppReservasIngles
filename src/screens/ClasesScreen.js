@@ -4,15 +4,13 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import NivelFiltro from "../components/NivelFiltro";
-import {spacing, colors, typography} from "../theme";
+import {spacing, colors, typography, radius} from "../theme";
 import {CLASES, NIVELES} from "../data/clases";
 
-
-
 export default function ClasesScreen ({navigation}) {
-    //const { columnas, paddingHorizontal } = useSafeAreaInsets();
+    //const { columnas, paddingHorizontal } = useResponsive();
     const [nivel, setNivel] = useState('Todos');
-    const [busqueda, setBusqueda] = useState()
+    const [busqueda, setBusqueda] = useState('');
 
     return (
         <View>
@@ -28,7 +26,7 @@ export default function ClasesScreen ({navigation}) {
                         autoComplete={false}
                     />
 
-                    {busqueda.length > 0 (
+                    {busqueda.length > 0 && (
                         <Ionicons
                             name="close-circle"
                             size= {18}
@@ -42,6 +40,7 @@ export default function ClasesScreen ({navigation}) {
                 {
                     NIVELES.map((item)=>(
                         <NivelFiltro
+                            key={item}
                             etiqueta={item}
                             activo={ nivel === item}
                             onPress={ ()=> setNivel(item)}
@@ -55,3 +54,19 @@ export default function ClasesScreen ({navigation}) {
     )
 }
 
+const style = StyleSheet.create({
+pantalla: { flex: 1, backgroundColor: colors.fondo },
+buscador: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.superficie,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.lg,
+    height: 46,
+    marginTop: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.borde,
+},
+input: { flex: 1, fontSize: 14, color: colors.texto, paddingVertical: 0 },
+});
