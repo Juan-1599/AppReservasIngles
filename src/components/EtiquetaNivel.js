@@ -1,6 +1,5 @@
-import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { spacing, colors, typography} from '../theme'
+import { spacing } from '../theme'
 
 export default function EtiquetaNivel({ nivel }) {
     return (
