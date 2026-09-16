@@ -1,5 +1,5 @@
 import React, {useState, useMemo} from "react";
-import {View, Text, TextInput, FlatList, ScrollView, StyleSheet, FlatList} from "react-native";
+import {View, Text, TextInput, FlatList, ScrollView, StyleSheet} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import EstadoVacio from "../components/EstadoVacio";
 
@@ -24,8 +24,8 @@ export default function ClasesScreen ({navigation}) {
         return CLASES.filter((clase)=>{
             const coincideNivel = nivel === 'Todos' || clase.nivel === nivel;
             const coincideTextoBusqueda = textoBusqueda === '' ||
-            clase.titulo.toLowerCase().includes(textoBusqueda)
-            clase.profesor.nombre.toLowerCase().includes(textoBusqueda)
+            clase.titulo.toLowerCase().includes(textoBusqueda) ||
+            clase.profesor.nombre.toLowerCase().includes(textoBusqueda);
             return coincideNivel && coincideTextoBusqueda
         })
     },[nivel, busqueda]);
@@ -64,15 +64,17 @@ export default function ClasesScreen ({navigation}) {
                     ))
                 }
                 </ScrollView>
+
                 <FlatList
-                    data={CLASES}
-                    renderItem={({item})=>{
+                    data={resultados}
+                    keyExtractor={(item) =>item.id }
+                    renderItem={({item})=>(
                         <Card
                             clase ={item}
                             onPress={()=> navigation.navigate('DetalleClase', {clase: item})}
                         />
 
-                    }}
+                    )}
                     numColumns={columnas}
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle = {{paddingHorizontal,
@@ -84,19 +86,18 @@ export default function ClasesScreen ({navigation}) {
                         icono="search-outline"
                         titulo="No encontramos valores de búsqueda"
                         mensaje="Prueba con otro valor de busqueda o cambia las palabras"
-                        textoAccion="Quitar filtros
+                        textoAccion="Quitar filtros"
                         onAction={() => {
                             setNivel('Todos');
                             setBusqueda('');
                         }}
-                        "
                     />
-                }
-            />
+                    }
+                />
         </View>
-
     )
 }
+            
 const style = StyleSheet.create({
 pantalla: { flex: 1, backgroundColor: colors.fondo },
 buscador: {
